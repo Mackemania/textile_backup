@@ -44,7 +44,7 @@ public class ZipCompressor extends AbstractCompressor {
 
     @Override
     protected OutputStream createArchiveOutputStream(OutputStream stream, ExecutableBackup ctx, int coreLimit) {
-        ZipArchiveOutputStream arc =  new ZipArchiveOutputStream(stream);
+        ZipArchiveOutputStream arc = new ZipArchiveOutputStream(stream);
 
         arc.setMethod(ZipArchiveOutputStream.DEFLATED);
         arc.setUseZip64(Zip64Mode.AsNeeded);
@@ -59,11 +59,11 @@ public class ZipCompressor extends AbstractCompressor {
         try (InputStream fileInputStream = input.getInputStream()) {
             ZipArchiveEntry entry;
 
-            if(input.getPath().isEmpty()) {
+            if (input.getPath().isEmpty()) {
                 entry = new ZipArchiveEntry(input.getName());
 
                 //It's basically just
-                byte[] buff = new byte[(int)input.size()];
+                byte[] buff = new byte[(int) input.size()];
                 int len = input.getInputStream().read(buff);
                 Checksum sum = new CRC32();
                 sum.update(buff, 0, len);
@@ -72,12 +72,12 @@ public class ZipCompressor extends AbstractCompressor {
                 entry.setMethod(ZipEntry.STORED);
                 entry.setSize(input.size());
 
-                ((ZipArchiveOutputStream)arc).putArchiveEntry(entry);
+                ((ZipArchiveOutputStream) arc).putArchiveEntry(entry);
 
                 arc.write(buff, 0, len);
             } else {
                 Path file = input.getPath().get();
-                entry = (ZipArchiveEntry) ((ZipArchiveOutputStream) arc).createArchiveEntry(file, input.getName());
+                entry = ((ZipArchiveOutputStream) arc).createArchiveEntry(file, input.getName());
                 if (isDotDat(file.toString())) {
                     entry.setMethod(ZipEntry.STORED);
                     entry.setSize(Files.size(file));
@@ -85,12 +85,12 @@ public class ZipCompressor extends AbstractCompressor {
                     entry.setCrc(getCRC(file));
                 } else entry.setMethod(ZipEntry.DEFLATED);
 
-                ((ZipArchiveOutputStream)arc).putArchiveEntry(entry);
+                ((ZipArchiveOutputStream) arc).putArchiveEntry(entry);
 
                 IOUtils.copy(fileInputStream, arc);
             }
 
-            ((ZipArchiveOutputStream)arc).closeArchiveEntry();
+            ((ZipArchiveOutputStream) arc).closeArchiveEntry();
         }
     }
 

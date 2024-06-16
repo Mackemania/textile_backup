@@ -63,7 +63,7 @@ public class RestoreBackupRunnable implements Runnable {
 
         try {
             tmp = Files.createTempDirectory(
-                    ctx.server().getRunDirectory().toPath(),
+                    ctx.server().getRunDirectory(),
                     ctx.restoreableFile().getFile().getFileName().toString()
             );
         } catch (IOException e) {

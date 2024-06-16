@@ -49,7 +49,7 @@ public class AbstractTarArchiver extends AbstractCompressor {
                 entry = new TarArchiveEntry(input.getName());
                 entry.setSize(input.size());
             } else
-                entry = (TarArchiveEntry)((TarArchiveOutputStream) arc).createArchiveEntry(input.getPath().get(), input.getName());
+                entry = ((TarArchiveOutputStream) arc).createArchiveEntry(input.getPath().get(), input.getName());
 
             ((TarArchiveOutputStream)arc).putArchiveEntry(entry);
 
